@@ -229,17 +229,17 @@ nav{
     cursor: pointer;
 }
 .uil-instagram{
-    font-size: 40px;
+    font-size: 20px;
 }
 .uil-linkedin-alt{
-    font-size: 40px;
+    font-size: 20px;
 }
 .uil-dribbble{
-    font-size: 40px;
+    font-size: 20px;
 }
 .uil-github-alt
 {
-    font-size: 40px;
+    font-size: 20px;
 }
 .icon:hover{
     color: var(--first-color);
