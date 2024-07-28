@@ -179,7 +179,7 @@ nav{
    
     font-size: 12px;
     border-radius: 5px;
-    font-size: 28px;
+    font-size: 25px;
     font-weight: 700;
 
 }
@@ -192,7 +192,7 @@ nav{
 .typedText{
     text-transform: capitalize;
     color: var(--text-color-third);
-    font-size: 45px;
+    font-size: 30px;
     font-weight: 800;
 }
 .featured-text-info{
