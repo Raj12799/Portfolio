@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin and User Dashboard</title>
+    <title>District Hospital Nandurbar - Admin and User Dashboard</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,7 +14,26 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            transition: background-color 0.3s ease;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
         }
 
         .section {
@@ -23,42 +42,6 @@
 
         .visible {
             display: block;
-            animation: fadeIn 0.5s;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
-        }
-
-        .modal-content {
-            background-color: #fff;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 400px;
-            animation: slideDown 0.5s;
-        }
-
-        .close, .close-popup {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover, .close:focus, .close-popup:hover, .close-popup:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
         }
 
         form {
@@ -66,6 +49,15 @@
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin: auto;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         input[type="text"], input[type="password"], input[type="date"], input[type="time"], input[type="tel"] {
@@ -85,19 +77,22 @@
             color: white;
             font-size: 16px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         button:hover {
             background: #218838;
         }
 
-        .logout {
-            text-align: right;
+        .error-message {
+            color: red;
+            font-size: 14px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
 
         th, td {
@@ -106,148 +101,145 @@
             text-align: left;
         }
 
-        th {
-            background-color: #f2f2f2;
-        }
-
-        .error-message {
-            color: red;
-        }
-
-        .hidden {
+        .admin-controls {
             display: none;
         }
 
-        .profile-image {
-            display: block;
-            margin: 0 auto 20px auto;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: url('profile.jpg') no-repeat center center;
-            background-size: cover;
+        .modal, #suspension-popup, #admin-login-modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
         }
 
-        h2 {
-            text-align: center;
+        .modal-content, .suspension-popup-content, .admin-login-modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
         }
 
-        @keyframes fadeIn {
-            from {opacity: 0;}
-            to {opacity: 1;}
+        .close, .close-popup, .admin-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
         }
 
-        @keyframes slideDown {
-            from {transform: translateY(-50px);}
-            to {transform: translateY(0);}
+        .close:hover, .close-popup:hover, .admin-close:hover {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
 
-        @media screen and (max-width: 600px) {
-            .modal-content, form {
+        .hide-form {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            form {
                 width: 90%;
-            }
-
-            th, td {
-                font-size: 14px;
-            }
-
-            button {
-                font-size: 14px;
             }
         }
     </style>
 </head>
 <body>
-    <div id="admin-login-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <form id="admin-login-form">
-                <h2>Admin Login</h2>
-                <input type="text" id="admin-username" placeholder="Admin Username" required>
-                <input type="password" id="admin-password" placeholder="Admin Password" required>
+    <div class="container">
+        <header>District Hospital Nandurbar</header>
+
+        <div id="login-section" class="section visible">
+            <form id="login-form">
+                <h2>Login</h2>
+                <input type="text" id="login-username" placeholder="Username" required>
+                <input type="password" id="login-password" placeholder="Password" required>
                 <button type="submit">Login</button>
-                <p id="admin-login-error-message" class="error-message"></p>
+                <p id="login-error-message" class="error-message"></p>
             </form>
+            <p><a href="#" id="show-register">Register</a></p>
+            <p><a href="#" id="show-admin-login">Admin Login</a></p>
         </div>
-    </div>
 
-    <div id="suspension-popup" class="modal">
-        <div class="modal-content">
-            <span class="close-popup">&times;</span>
-            <p>Your account is suspended. Please contact the admin.</p>
+        <div id="register-section" class="section">
+            <form id="register-form">
+                <h2>Register</h2>
+                <input type="text" id="register-username" placeholder="Username" required>
+                <input type="password" id="register-password" placeholder="Password" required>
+                <button type="submit">Register</button>
+                <p id="register-error-message" class="error-message"></p>
+            </form>
+            <p><a href="#" id="show-login">Back to Login</a></p>
         </div>
-    </div>
 
-    <div id="login-section" class="section visible">
-        <div class="profile-image"></div>
-        <h2>District Hospital Nandurbar</h2>
-        <form id="login-form">
-            <h2>Login</h2>
-            <input type="text" id="login-username" placeholder="Username" required>
-            <input type="password" id="login-password" placeholder="Password" required>
-            <button type="submit">Login</button>
-            <p id="login-error-message" class="error-message"></p>
-            <p><a href="#" id="show-register">Register</a> | <a href="#" id="show-admin-login">Admin Login</a></p>
-        </form>
-    </div>
+        <div id="dashboard-section" class="section">
+            <h1>Dashboard</h1>
+            <p>Welcome, <span id="username-display"></span></p>
+            <button id="logout-button">Logout</button>
 
-    <div id="register-section" class="section hidden">
-        <form id="register-form">
-            <h2>Register</h2>
-            <input type="text" id="register-username" placeholder="Username" required>
-            <input type="password" id="register-password" placeholder="Password" required>
-            <button type="submit">Register</button>
-            <p id="register-error-message" class="error-message"></p>
-            <p><a href="#" id="show-login">Login</a></p>
-        </form>
-    </div>
+            <div class="admin-controls">
+                <h2>Admin Controls</h2>
+                <table id="user-list">
+                    <tr>
+                        <th>Sr.No</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Actions</th>
+                    </tr>
+                </table>
+                <button id="delete-all-users">Delete All Users</button>
+            </div>
 
-    <div id="dashboard-section" class="section hidden">
-        <h1>Dashboard</h1>
-        <div class="logout">
-            <p>Logged in as <span id="username-display"></span></p>
-            <a href="#" id="logout-link">Logout</a>
-        </div>
-        
-        <div id="admin-controls" class="hidden">
-            <h2>Admin Controls</h2>
-            <table id="user-list">
+            <div id="data-entry-section">
+                <h2>Data Entry</h2>
+                <form id="data-form">
+                    <input type="date" id="date" required>
+                    <input type="text" id="institute_name" placeholder="Institute Name" required>
+                    <input type="text" id="on_duty_mo_name" placeholder="On Duty MO Name" required>
+                    <input type="time" id="duty_time" required>
+                    <input type="tel" id="mobile_no" placeholder="Mobile No" required>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+
+            <table id="data-table">
                 <tr>
                     <th>Sr.No</th>
-                    <th>Username</th>
-                    <th>Password</th>
+                    <th>Date</th>
+                    <th>Institute Name</th>
+                    <th>On Duty MO Name</th>
+                    <th>Duty Time</th>
+                    <th>Mobile No</th>
+                    <th>User ID</th>
+                    <th>Location</th>
                     <th>Actions</th>
                 </tr>
             </table>
-            <button id="delete-all-users">Delete All Users</button>
         </div>
 
-        <h2>Data Entries</h2>
-        <table id="data-table">
-            <tr>
-                <th>Sr.No</th>
-                <th>Date</th>
-                <th>Institute Name</th>
-                <th>On Duty MO Name</th>
-                <th>Duty Time</th>
-                <th>Mobile No</th>
-                <th>User ID</th>
-                <th>Location</th>
-                <th>Actions</th>
-            </tr>
-        </table>
-        
-        <div id="data-entry-form">
-            <h2>Enter Data</h2>
-            <form id="data-form">
-                <input type="date" id="date" required>
-                <input type="text" id="institute_name" placeholder="Institute Name" required>
-                <input type="text" id="on_duty_mo_name" placeholder="On Duty MO Name" required>
-                <input type="time" id="duty_time" required>
-                <input type="tel" id="mobile_no" placeholder="Mobile No" required>
-                <input type="hidden" id="user_id">
-                <button type="submit">Submit</button>
-            </form>
+        <div id="admin-login-modal" class="modal">
+            <div class="admin-login-modal-content">
+                <span class="admin-close">&times;</span>
+                <form id="admin-login-form">
+                    <h2>Admin Login</h2>
+                    <input type="text" id="admin-username" placeholder="Admin Username" required>
+                    <input type="password" id="admin-password" placeholder="Admin Password" required>
+                    <button type="submit">Login</button>
+                    <p id="admin-login-error-message" class="error-message"></p>
+                </form>
+            </div>
+        </div>
+
+        <div id="suspension-popup">
+            <div class="suspension-popup-content">
+                <span class="close-popup">&times;</span>
+                <p>Your account has been suspended. Please contact the admin.</p>
+            </div>
         </div>
     </div>
 
@@ -260,111 +252,102 @@
             const registerSection = document.getElementById('register-section');
             const dashboardSection = document.getElementById('dashboard-section');
             const usernameDisplay = document.getElementById('username-display');
-            const logoutLink = document.getElementById('logout-link');
+            const logoutButton = document.getElementById('logout-button');
             const loginErrorMessage = document.getElementById('login-error-message');
             const registerErrorMessage = document.getElementById('register-error-message');
             const adminLoginErrorMessage = document.getElementById('admin-login-error-message');
-            const adminControls = document.getElementById('admin-controls');
-            const userList = document.getElementById('user-list');
-            const deleteAllUsersButton = document.getElementById('delete-all-users');
+            const dataForm = document.getElementById('data-form');
+            const dataTable = document.getElementById('data-table');
             const showRegister = document.getElementById('show-register');
             const showLogin = document.getElementById('show-login');
             const showAdminLogin = document.getElementById('show-admin-login');
             const adminLoginModal = document.getElementById('admin-login-modal');
-            const closeModal = document.querySelector('.close');
+            const adminClose = document.querySelector('.admin-close');
             const suspensionPopup = document.getElementById('suspension-popup');
             const closePopup = document.querySelector('.close-popup');
-            const dataForm = document.getElementById('data-form');
-            const dataTable = document.getElementById('data-table');
+            const userList = document.getElementById('user-list');
+            const deleteAllUsers = document.getElementById('delete-all-users');
 
-            let users = JSON.parse(localStorage.getItem('users')) || {};
-            let dataEntries = JSON.parse(localStorage.getItem('data_entries')) || [];
+            let users = JSON.parse(localStorage.getItem('users')) || {
+                'admin': { password: 'admin', role: 'admin' }
+            };
 
-            function updateUserList() {
-                userList.innerHTML = `
-                    <tr>
-                        <th>Sr.No</th>
-                        <th>Username</th>
-                        <th>Password</th>
-                        <th>Actions</th>
-                    </tr>
-                `;
-                Object.keys(users).forEach((username, index) => {
-                    const userRow = document.createElement('tr');
-                    userRow.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${username}</td>
-                        <td>${users[username].password}</td>
-                        <td>
-                            <button class="enable-user">Enable</button>
-                            <button class="disable-user">Disable</button>
-                            <button class="delete-user">Delete</button>
-                        </td>
-                    `;
-                    userList.appendChild(userRow);
-                    
-                    userRow.querySelector('.enable-user').addEventListener('click', function () {
-                        users[username].enabled = true;
-                        localStorage.setItem('users', JSON.stringify(users));
-                    });
+            let dataEntries = JSON.parse(localStorage.getItem('dataEntries')) || [];
 
-                    userRow.querySelector('.disable-user').addEventListener('click', function () {
-                        users[username].enabled = false;
-                        localStorage.setItem('users', JSON.stringify(users));
-                    });
-
-                    userRow.querySelector('.delete-user').addEventListener('click', function () {
-                        delete users[username];
-                        localStorage.setItem('users', JSON.stringify(users));
-                        updateUserList();
-                    });
-                });
+            function saveUsers() {
+                localStorage.setItem('users', JSON.stringify(users));
             }
 
-            function updateDataTable() {
-                dataTable.innerHTML = `
-                    <tr>
-                        <th>Sr.No</th>
-                        <th>Date</th>
-                        <th>Institute Name</th>
-                        <th>On Duty MO Name</th>
-                        <th>Duty Time</th>
-                        <th>Mobile No</th>
-                        <th>User ID</th>
-                        <th>Location</th>
-                        <th>Actions</th>
-                    </tr>
-                `;
-                dataEntries.forEach((entry, index) => {
-                    const dataRow = document.createElement('tr');
-                    dataRow.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${entry.date}</td>
-                        <td>${entry.instituteName}</td>
-                        <td>${entry.onDutyMoName}</td>
-                        <td>${entry.dutyTime}</td>
-                        <td>${entry.mobileNo}</td>
-                        <td>${entry.userId}</td>
-                        <td>${entry.location}</td>
-                        <td><button class="delete-data">Delete</button></td>
-                    `;
-                    dataTable.appendChild(dataRow);
-
-                    dataRow.querySelector('.delete-data').addEventListener('click', function () {
-                        dataEntries.splice(index, 1);
-                        localStorage.setItem('data_entries', JSON.stringify(dataEntries));
-                        updateDataTable();
-                    });
-                });
+            function saveDataEntries() {
+                localStorage.setItem('dataEntries', JSON.stringify(dataEntries));
             }
 
             function switchToSection(sectionId) {
-                const sections = document.querySelectorAll('.section');
-                sections.forEach(section => {
-                    section.classList.add('hidden');
+                document.querySelectorAll('.section').forEach(section => {
                     section.classList.remove('visible');
                 });
                 document.getElementById(sectionId).classList.add('visible');
+            }
+
+            function populateUserList() {
+                while (userList.rows.length > 1) {
+                    userList.deleteRow(1);
+                }
+                let index = 1;
+                for (let username in users) {
+                    if (users.hasOwnProperty(username)) {
+                        let row = userList.insertRow();
+                        row.insertCell(0).innerText = index++;
+                        row.insertCell(1).innerText = username;
+                        row.insertCell(2).innerText = users[username].password;
+                        let actionsCell = row.insertCell(3);
+                        if (users[username].role !== 'admin') {
+                            let enableDisableButton = document.createElement('button');
+                            enableDisableButton.innerText = users[username].disabled ? 'Enable' : 'Disable';
+                            enableDisableButton.addEventListener('click', () => {
+                                users[username].disabled = !users[username].disabled;
+                                saveUsers();
+                                populateUserList();
+                            });
+                            actionsCell.appendChild(enableDisableButton);
+
+                            let deleteButton = document.createElement('button');
+                            deleteButton.innerText = 'Delete';
+                            deleteButton.addEventListener('click', () => {
+                                delete users[username];
+                                saveUsers();
+                                populateUserList();
+                            });
+                            actionsCell.appendChild(deleteButton);
+                        }
+                    }
+                }
+            }
+
+            function populateDataTable() {
+                while (dataTable.rows.length > 1) {
+                    dataTable.deleteRow(1);
+                }
+                dataEntries.forEach((entry, index) => {
+                    let row = dataTable.insertRow();
+                    row.insertCell(0).innerText = index + 1;
+                    row.insertCell(1).innerText = entry.date;
+                    row.insertCell(2).innerText = entry.institute_name;
+                    row.insertCell(3).innerText = entry.on_duty_mo_name;
+                    row.insertCell(4).innerText = entry.duty_time;
+                    row.insertCell(5).innerText = entry.mobile_no;
+                    row.insertCell(6).innerText = entry.username;
+                    row.insertCell(7).innerText = entry.location;
+                    let deleteCell = row.insertCell(8);
+                    let deleteButton = document.createElement('button');
+                    deleteButton.innerText = 'Delete';
+                    deleteButton.addEventListener('click', () => {
+                        dataEntries.splice(index, 1);
+                        saveDataEntries();
+                        populateDataTable();
+                    });
+                    deleteCell.appendChild(deleteButton);
+                });
             }
 
             loginForm.addEventListener('submit', function (event) {
@@ -373,14 +356,21 @@
                 const password = document.getElementById('login-password').value;
 
                 if (users[username] && users[username].password === password) {
-                    if (users[username].enabled === false) {
+                    if (users[username].disabled) {
                         suspensionPopup.style.display = 'block';
                     } else {
                         localStorage.setItem('currentUser', username);
                         switchToSection('dashboard-section');
                         usernameDisplay.textContent = username;
-                        updateUserList();
-                        updateDataTable();
+                        if (users[username].role === 'admin') {
+                            document.querySelector('.admin-controls').style.display = 'block';
+                            populateUserList();
+                            document.getElementById('data-entry-section').classList.add('hide-form');
+                        } else {
+                            document.querySelector('.admin-controls').style.display = 'none';
+                            document.getElementById('data-entry-section').classList.remove('hide-form');
+                        }
+                        populateDataTable();
                     }
                 } else {
                     loginErrorMessage.textContent = 'Invalid username or password.';
@@ -395,108 +385,97 @@
                 if (users[username]) {
                     registerErrorMessage.textContent = 'Username already exists.';
                 } else {
-                    users[username] = { password: password, enabled: true };
-                    localStorage.setItem('users', JSON.stringify(users));
+                    users[username] = { password, role: 'user' };
+                    saveUsers();
+                    alert('Registration successful!');
                     switchToSection('login-section');
                 }
             });
 
             adminLoginForm.addEventListener('submit', function (event) {
                 event.preventDefault();
-                const adminUsername = document.getElementById('admin-username').value;
-                const adminPassword = document.getElementById('admin-password').value;
+                const username = document.getElementById('admin-username').value;
+                const password = document.getElementById('admin-password').value;
 
-                if (adminUsername === 'CHN' && adminPassword === 'CHN') {
+                if (username === 'CHN' && password === 'CHN') {
+                    localStorage.setItem('currentUser', 'admin');
                     switchToSection('dashboard-section');
-                    adminControls.classList.remove('hidden');
-                    usernameDisplay.textContent = 'Admin';
-                    updateUserList();
-                    updateDataTable();
+                    usernameDisplay.textContent = 'admin';
+                    document.querySelector('.admin-controls').style.display = 'block';
+                    populateUserList();
                     adminLoginModal.style.display = 'none';
                 } else {
                     adminLoginErrorMessage.textContent = 'Invalid admin credentials.';
                 }
             });
 
-            logoutLink.addEventListener('click', function (event) {
-                event.preventDefault();
+            logoutButton.addEventListener('click', function () {
                 localStorage.removeItem('currentUser');
                 switchToSection('login-section');
             });
 
-            dataForm.addEventListener('submit', function (event) {
-                event.preventDefault();
-                const date = document.getElementById('date').value;
-                const instituteName = document.getElementById('institute_name').value;
-                const onDutyMoName = document.getElementById('on_duty_mo_name').value;
-                const dutyTime = document.getElementById('duty_time').value;
-                const mobileNo = document.getElementById('mobile_no').value;
-                const userId = localStorage.getItem('currentUser');
-                const location = 'User Location'; // Placeholder for user location logic
-
-                const entry = {
-                    date: date,
-                    instituteName: instituteName,
-                    onDutyMoName: onDutyMoName,
-                    dutyTime: dutyTime,
-                    mobileNo: mobileNo,
-                    userId: userId,
-                    location: location
-                };
-
-                dataEntries.push(entry);
-                localStorage.setItem('data_entries', JSON.stringify(dataEntries));
-                updateDataTable();
-                dataForm.reset();
-            });
-
-            showRegister.addEventListener('click', function (event) {
-                event.preventDefault();
+            showRegister.addEventListener('click', function () {
                 switchToSection('register-section');
             });
 
-            showLogin.addEventListener('click', function (event) {
-                event.preventDefault();
+            showLogin.addEventListener('click', function () {
                 switchToSection('login-section');
             });
 
-            showAdminLogin.addEventListener('click', function (event) {
-                event.preventDefault();
+            showAdminLogin.addEventListener('click', function () {
                 adminLoginModal.style.display = 'block';
             });
 
-            closeModal.addEventListener('click', function () {
+            adminClose.addEventListener('click', function () {
                 adminLoginModal.style.display = 'none';
-            });
-
-            window.addEventListener('click', function (event) {
-                if (event.target === adminLoginModal) {
-                    adminLoginModal.style.display = 'none';
-                }
             });
 
             closePopup.addEventListener('click', function () {
                 suspensionPopup.style.display = 'none';
             });
 
-            window.addEventListener('click', function (event) {
-                if (event.target === suspensionPopup) {
-                    suspensionPopup.style.display = 'none';
+            dataForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const date = document.getElementById('date').value;
+                const institute_name = document.getElementById('institute_name').value;
+                const on_duty_mo_name = document.getElementById('on_duty_mo_name').value;
+                const duty_time = document.getElementById('duty_time').value;
+                const mobile_no = document.getElementById('mobile_no').value;
+                const location = window.location.href;
+                const username = localStorage.getItem('currentUser');
+
+                dataEntries.push({ date, institute_name, on_duty_mo_name, duty_time, mobile_no, location, username });
+                saveDataEntries();
+                populateDataTable();
+                dataForm.reset();
+            });
+
+            deleteAllUsers.addEventListener('click', function () {
+                if (confirm('Are you sure you want to delete all users?')) {
+                    users = {};
+                    saveUsers();
+                    populateUserList();
                 }
             });
 
-            deleteAllUsersButton.addEventListener('click', function () {
-                users = {};
-                localStorage.setItem('users', JSON.stringify(users));
-                updateUserList();
-            });
-
-            // Initial load
             if (localStorage.getItem('currentUser')) {
-                switchToSection('dashboard-section');
-                usernameDisplay.textContent = localStorage.getItem('currentUser');
-                updateUserList();
-                updateDataTable();
+                const currentUser = localStorage.getItem('currentUser');
+                if (users[currentUser] && !users[currentUser].disabled) {
+                    switchToSection('dashboard-section');
+                    usernameDisplay.textContent = currentUser;
+                    if (users[currentUser].role === 'admin') {
+                        document.querySelector('.admin-controls').style.display = 'block';
+                        populateUserList();
+                        document.getElementById('data-entry-section').classList.add('hide-form');
+                    } else {
+                        document.querySelector('.admin-controls').style.display = 'none';
+                        document.getElementById('data-entry-section').classList.remove('hide-form');
+                    }
+                    populateDataTable();
+                } else {
+                    localStorage.removeItem('currentUser');
+                    switchToSection('login-section');
+                }
             }
         });
     </script>
