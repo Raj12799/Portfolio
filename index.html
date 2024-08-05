@@ -7,49 +7,17 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
         }
+
         .section {
             display: none;
         }
-        .visible {
+
+        .section.visible {
             display: block;
-            animation: fadeIn 1s ease-in;
+            animation: fadeIn 0.5s;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            animation: fadeIn 1s ease-in;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        .button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .button:hover {
-            background-color: #45a049;
-        }
-        .hidden {
-            display: none;
-        }
+
         .modal {
             display: none;
             position: fixed;
@@ -61,31 +29,42 @@
             overflow: auto;
             background-color: rgb(0,0,0);
             background-color: rgba(0,0,0,0.4);
-            animation: fadeIn 1s ease-in;
         }
+
         .modal-content {
             background-color: #fefefe;
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
             width: 80%;
-            border-radius: 5px;
+            animation: slideIn 0.5s;
         }
-        .close {
+
+        .close, .close-popup {
             color: #aaa;
             float: right;
             font-size: 28px;
             font-weight: bold;
         }
-        .close:hover,
-        .close:focus {
+
+        .close:hover, .close:focus, .close-popup:hover, .close-popup:focus {
             color: black;
             text-decoration: none;
             cursor: pointer;
         }
+
+        .error-message {
+            color: red;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
     </style>
 </head>
@@ -94,59 +73,63 @@
     <div id="login-section" class="section visible">
         <h1>Login</h1>
         <form id="login-form">
-            <input type="text" id="login-username" placeholder="Username" required><br>
-            <input type="password" id="login-password" placeholder="Password" required><br>
-            <button type="submit" class="button">Login</button>
+            <label for="login-username">Username:</label>
+            <input type="text" id="login-username" required>
+            <label for="login-password">Password:</label>
+            <input type="password" id="login-password" required>
+            <button type="submit">Login</button>
+            <p id="login-error-message" class="error-message"></p>
         </form>
-        <p id="login-error-message" style="color: red;"></p>
         <a href="#" id="show-register">Register</a>
         <a href="#" id="show-admin-login">Admin Login</a>
     </div>
-
+    
     <!-- Register Section -->
-    <div id="register-section" class="section">
+    <div id="register-section" class="section hidden">
         <h1>Register</h1>
         <form id="register-form">
-            <input type="text" id="register-username" placeholder="Username" required><br>
-            <input type="password" id="register-password" placeholder="Password" required><br>
-            <button type="submit" class="button">Register</button>
+            <label for="register-username">Username:</label>
+            <input type="text" id="register-username" required>
+            <label for="register-password">Password:</label>
+            <input type="password" id="register-password" required>
+            <button type="submit">Register</button>
+            <p id="register-error-message" class="error-message"></p>
         </form>
-        <p id="register-error-message" style="color: red;"></p>
         <a href="#" id="show-login">Login</a>
     </div>
-
+    
     <!-- Admin Login Modal -->
     <div id="admin-login-modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Admin Login</h2>
+            <h1>Admin Login</h1>
             <form id="admin-login-form">
-                <input type="text" id="admin-username" placeholder="Admin Username" required><br>
-                <input type="password" id="admin-password" placeholder="Admin Password" required><br>
-                <button type="submit" class="button">Login</button>
+                <label for="admin-username">Admin Username:</label>
+                <input type="text" id="admin-username" required>
+                <label for="admin-password">Admin Password:</label>
+                <input type="password" id="admin-password" required>
+                <button type="submit">Login</button>
+                <p id="admin-login-error-message" class="error-message"></p>
             </form>
-            <p id="admin-login-error-message" style="color: red;"></p>
         </div>
     </div>
-
+    
     <!-- Suspension Popup -->
     <div id="suspension-popup" class="modal">
         <div class="modal-content">
             <span class="close-popup">&times;</span>
-            <h2>Suspended</h2>
-            <p>Your ID is suspended temporarily by the admin. Please contact the admin.</p>
+            <p>Your account is suspended. Please contact admin.</p>
         </div>
     </div>
-
+    
     <!-- Dashboard Section -->
-    <div id="dashboard-section" class="section">
+    <div id="dashboard-section" class="section hidden">
         <h1>Dashboard</h1>
         <div class="logout">
             <p>Logged in as <span id="username-display"></span></p>
-            <a href="#" id="logout-link" class="button">Logout</a>
+            <a href="#" id="logout-link">Logout</a>
         </div>
-
-        <!-- Admin Controls -->
+        
         <div id="admin-controls" class="hidden">
             <h2>Admin Controls</h2>
             <table id="user-list">
@@ -157,11 +140,23 @@
                     <th>Actions</th>
                 </tr>
             </table>
-            <button id="delete-all-users" class="button">Delete All Users</button>
+            <button id="delete-all-users">Delete All Users</button>
         </div>
-
-        <!-- Data Entries -->
+        
         <h2>Data Entries</h2>
+        <form id="data-entry-form" class="visible">
+            <label for="date">Date:</label>
+            <input type="date" id="date" required>
+            <label for="institute-name">Institute Name:</label>
+            <input type="text" id="institute-name" required>
+            <label for="on-duty-mo-name">On Duty MO Name:</label>
+            <input type="text" id="on-duty-mo-name" required>
+            <label for="duty-time">Duty Time:</label>
+            <input type="time" id="duty-time" required>
+            <label for="mobile-no">Mobile No:</label>
+            <input type="text" id="mobile-no" required>
+            <button type="submit">Submit</button>
+        </form>
         <table id="data-table">
             <tr>
                 <th>Sr.No</th>
@@ -172,11 +167,11 @@
                 <th>Mobile No</th>
                 <th>User ID</th>
                 <th>Location</th>
-                <th>Actions</th> <!-- Added Actions Column -->
+                <th>Actions</th>
             </tr>
         </table>
     </div>
-
+    
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const loginForm = document.getElementById('login-form');
@@ -200,6 +195,8 @@
             const closeModal = document.querySelector('.close');
             const suspensionPopup = document.getElementById('suspension-popup');
             const closePopup = document.querySelector('.close-popup');
+            const dataEntryForm = document.getElementById('data-entry-form');
+            const dataTable = document.getElementById('data-table');
 
             let users = JSON.parse(localStorage.getItem('users')) || {};
             let dataEntries = JSON.parse(localStorage.getItem('data_entries')) || [];
@@ -221,9 +218,9 @@
                         <td>${username}</td>
                         <td>${user.password}</td>
                         <td>
-                            <button ${user.enabled ? 'disabled' : ''} data-username="${username}" class="enable-btn button">Enable</button>
-                            <button ${user.enabled ? '' : 'disabled'} data-username="${username}" class="disable-btn button">Disable</button>
-                            <button data-username="${username}" class="delete-btn button">Delete</button>
+                            <button ${user.enabled ? 'disabled' : ''} data-username="${username}" class="enable-btn">Enable</button>
+                            <button ${user.enabled ? '' : 'disabled'} data-username="${username}" class="disable-btn">Disable</button>
+                            <button data-username="${username}" class="delete-btn">Delete</button>
                         </td>
                     `;
                     userList.appendChild(row);
@@ -283,7 +280,7 @@
                         <td>${entry.mobile_no}</td>
                         <td>${entry.user_id}</td>
                         <td><a href="https://www.google.com/maps/search/?api=1&query=${entry.location}" target="_blank">View Location</a></td>
-                        <td><button data-index="${index}" class="delete-data-btn button">Delete</button></td>
+                        <td><button data-index="${index}" class="delete-data-btn">Delete</button></td>
                     `;
                     table.appendChild(row);
                 });
@@ -321,6 +318,13 @@
                         localStorage.setItem('currentUser', username);
                         switchToSection('dashboard-section');
                         usernameDisplay.textContent = username;
+                        if (username === 'Admin') {
+                            adminControls.classList.remove('hidden');
+                            dataEntryForm.classList.add('hidden');
+                        } else {
+                            adminControls.classList.add('hidden');
+                            dataEntryForm.classList.remove('hidden');
+                        }
                         updateUserList();
                         loadData();
                     } else {
@@ -352,9 +356,11 @@
                 const adminPassword = document.getElementById('admin-password').value;
 
                 if (adminUsername === 'CHN' && adminPassword === 'CHN') {
+                    localStorage.setItem('currentUser', 'Admin');
                     switchToSection('dashboard-section');
                     usernameDisplay.textContent = 'Admin';
                     adminControls.classList.remove('hidden');
+                    dataEntryForm.classList.add('hidden');
                     updateUserList();
                     loadData();
                     adminLoginModal.style.display = 'none';
@@ -409,10 +415,42 @@
                 updateUserList();
             });
 
+            dataEntryForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const date = document.getElementById('date').value;
+                const instituteName = document.getElementById('institute-name').value;
+                const onDutyMoName = document.getElementById('on-duty-mo-name').value;
+                const dutyTime = document.getElementById('duty-time').value;
+                const mobileNo = document.getElementById('mobile-no').value;
+                const userId = localStorage.getItem('currentUser');
+                const location = ''; // You might want to add logic to get the user's current location
+
+                dataEntries.push({
+                    date,
+                    institute_name: instituteName,
+                    on_duty_mo_name: onDutyMoName,
+                    duty_time: dutyTime,
+                    mobile_no: mobileNo,
+                    user_id: userId,
+                    location
+                });
+
+                localStorage.setItem('data_entries', JSON.stringify(dataEntries));
+                loadData();
+            });
+
             // Initial load
             if (localStorage.getItem('currentUser')) {
                 switchToSection('dashboard-section');
-                usernameDisplay.textContent = localStorage.getItem('currentUser');
+                const currentUser = localStorage.getItem('currentUser');
+                usernameDisplay.textContent = currentUser;
+                if (currentUser === 'Admin') {
+                    adminControls.classList.remove('hidden');
+                    dataEntryForm.classList.add('hidden');
+                } else {
+                    adminControls.classList.add('hidden');
+                    dataEntryForm.classList.remove('hidden');
+                }
                 updateUserList();
                 loadData();
             }
