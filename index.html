@@ -3,17 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Admin and User Dashboard</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            transition: background-color 0.3s ease;
         }
 
         .section {
             display: none;
         }
 
-        .section.visible {
+        .visible {
             display: block;
             animation: fadeIn 0.5s;
         }
@@ -27,17 +35,17 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgb(0,0,0);
             background-color: rgba(0,0,0,0.4);
         }
 
         .modal-content {
-            background-color: #fefefe;
+            background-color: #fff;
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
             width: 80%;
-            animation: slideIn 0.5s;
+            max-width: 400px;
+            animation: slideDown 0.5s;
         }
 
         .close, .close-popup {
@@ -48,81 +56,136 @@
         }
 
         .close:hover, .close:focus, .close-popup:hover, .close-popup:focus {
-            color: black;
+            color: #000;
             text-decoration: none;
             cursor: pointer;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"], input[type="password"], input[type="date"], input[type="time"], input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #28a745;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #218838;
+        }
+
+        .logout {
+            text-align: right;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
         }
 
         .error-message {
             color: red;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .hidden {
+            display: none;
         }
 
-        @keyframes slideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        @keyframes slideDown {
+            from {transform: translateY(-50px);}
+            to {transform: translateY(0);}
+        }
+
+        @media screen and (max-width: 600px) {
+            .modal-content, form {
+                width: 90%;
+            }
+
+            th, td {
+                font-size: 14px;
+            }
+
+            button {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Login Section -->
-    <div id="login-section" class="section visible">
-        <h1>Login</h1>
-        <form id="login-form">
-            <label for="login-username">Username:</label>
-            <input type="text" id="login-username" required>
-            <label for="login-password">Password:</label>
-            <input type="password" id="login-password" required>
-            <button type="submit">Login</button>
-            <p id="login-error-message" class="error-message"></p>
-        </form>
-        <a href="#" id="show-register">Register</a>
-        <a href="#" id="show-admin-login">Admin Login</a>
-    </div>
-    
-    <!-- Register Section -->
-    <div id="register-section" class="section hidden">
-        <h1>Register</h1>
-        <form id="register-form">
-            <label for="register-username">Username:</label>
-            <input type="text" id="register-username" required>
-            <label for="register-password">Password:</label>
-            <input type="password" id="register-password" required>
-            <button type="submit">Register</button>
-            <p id="register-error-message" class="error-message"></p>
-        </form>
-        <a href="#" id="show-login">Login</a>
-    </div>
-    
-    <!-- Admin Login Modal -->
     <div id="admin-login-modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h1>Admin Login</h1>
             <form id="admin-login-form">
-                <label for="admin-username">Admin Username:</label>
-                <input type="text" id="admin-username" required>
-                <label for="admin-password">Admin Password:</label>
-                <input type="password" id="admin-password" required>
+                <h2>Admin Login</h2>
+                <input type="text" id="admin-username" placeholder="Admin Username" required>
+                <input type="password" id="admin-password" placeholder="Admin Password" required>
                 <button type="submit">Login</button>
                 <p id="admin-login-error-message" class="error-message"></p>
             </form>
         </div>
     </div>
-    
-    <!-- Suspension Popup -->
+
     <div id="suspension-popup" class="modal">
         <div class="modal-content">
             <span class="close-popup">&times;</span>
-            <p>Your account is suspended. Please contact admin.</p>
+            <p>Your account is suspended. Please contact the admin.</p>
         </div>
     </div>
-    
-    <!-- Dashboard Section -->
+
+    <div id="login-section" class="section visible">
+        <form id="login-form">
+            <h2>Login</h2>
+            <input type="text" id="login-username" placeholder="Username" required>
+            <input type="password" id="login-password" placeholder="Password" required>
+            <button type="submit">Login</button>
+            <p id="login-error-message" class="error-message"></p>
+            <p><a href="#" id="show-register">Register</a> | <a href="#" id="show-admin-login">Admin Login</a></p>
+        </form>
+    </div>
+
+    <div id="register-section" class="section hidden">
+        <form id="register-form">
+            <h2>Register</h2>
+            <input type="text" id="register-username" placeholder="Username" required>
+            <input type="password" id="register-password" placeholder="Password" required>
+            <button type="submit">Register</button>
+            <p id="register-error-message" class="error-message"></p>
+            <p><a href="#" id="show-login">Login</a></p>
+        </form>
+    </div>
+
     <div id="dashboard-section" class="section hidden">
         <h1>Dashboard</h1>
         <div class="logout">
@@ -142,21 +205,8 @@
             </table>
             <button id="delete-all-users">Delete All Users</button>
         </div>
-        
+
         <h2>Data Entries</h2>
-        <form id="data-entry-form" class="visible">
-            <label for="date">Date:</label>
-            <input type="date" id="date" required>
-            <label for="institute-name">Institute Name:</label>
-            <input type="text" id="institute-name" required>
-            <label for="on-duty-mo-name">On Duty MO Name:</label>
-            <input type="text" id="on-duty-mo-name" required>
-            <label for="duty-time">Duty Time:</label>
-            <input type="time" id="duty-time" required>
-            <label for="mobile-no">Mobile No:</label>
-            <input type="text" id="mobile-no" required>
-            <button type="submit">Submit</button>
-        </form>
         <table id="data-table">
             <tr>
                 <th>Sr.No</th>
@@ -170,8 +220,21 @@
                 <th>Actions</th>
             </tr>
         </table>
+        
+        <div id="data-entry-form">
+            <h2>Enter Data</h2>
+            <form id="data-form">
+                <input type="date" id="date" required>
+                <input type="text" id="institute_name" placeholder="Institute Name" required>
+                <input type="text" id="on_duty_mo_name" placeholder="On Duty MO Name" required>
+                <input type="time" id="duty_time" required>
+                <input type="tel" id="mobile_no" placeholder="Mobile No" required>
+                <input type="hidden" id="user_id">
+                <button type="submit">Submit</button>
+            </form>
+        </div>
     </div>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const loginForm = document.getElementById('login-form');
@@ -195,266 +258,4 @@
             const closeModal = document.querySelector('.close');
             const suspensionPopup = document.getElementById('suspension-popup');
             const closePopup = document.querySelector('.close-popup');
-            const dataEntryForm = document.getElementById('data-entry-form');
-            const dataTable = document.getElementById('data-table');
-
-            let users = JSON.parse(localStorage.getItem('users')) || {};
-            let dataEntries = JSON.parse(localStorage.getItem('data_entries')) || [];
-
-            function updateUserList() {
-                userList.innerHTML = `
-                    <tr>
-                        <th>Sr.No</th>
-                        <th>Username</th>
-                        <th>Password</th>
-                        <th>Actions</th>
-                    </tr>
-                `;
-                let index = 1;
-                for (const [username, user] of Object.entries(users)) {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${index++}</td>
-                        <td>${username}</td>
-                        <td>${user.password}</td>
-                        <td>
-                            <button ${user.enabled ? 'disabled' : ''} data-username="${username}" class="enable-btn">Enable</button>
-                            <button ${user.enabled ? '' : 'disabled'} data-username="${username}" class="disable-btn">Disable</button>
-                            <button data-username="${username}" class="delete-btn">Delete</button>
-                        </td>
-                    `;
-                    userList.appendChild(row);
-                }
-
-                document.querySelectorAll('.enable-btn').forEach(btn => {
-                    btn.addEventListener('click', function () {
-                        const username = this.getAttribute('data-username');
-                        users[username].enabled = true;
-                        localStorage.setItem('users', JSON.stringify(users));
-                        updateUserList();
-                    });
-                });
-
-                document.querySelectorAll('.disable-btn').forEach(btn => {
-                    btn.addEventListener('click', function () {
-                        const username = this.getAttribute('data-username');
-                        users[username].enabled = false;
-                        localStorage.setItem('users', JSON.stringify(users));
-                        updateUserList();
-                    });
-                });
-
-                document.querySelectorAll('.delete-btn').forEach(btn => {
-                    btn.addEventListener('click', function () {
-                        const username = this.getAttribute('data-username');
-                        delete users[username];
-                        localStorage.setItem('users', JSON.stringify(users));
-                        updateUserList();
-                    });
-                });
-            }
-
-            function loadData() {
-                const table = document.getElementById('data-table');
-                table.innerHTML = `
-                    <tr>
-                        <th>Sr.No</th>
-                        <th>Date</th>
-                        <th>Institute Name</th>
-                        <th>On Duty MO Name</th>
-                        <th>Duty Time</th>
-                        <th>Mobile No</th>
-                        <th>User ID</th>
-                        <th>Location</th>
-                        <th>Actions</th>
-                    </tr>
-                `;
-                dataEntries.forEach((entry, index) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${entry.date}</td>
-                        <td>${entry.institute_name}</td>
-                        <td>${entry.on_duty_mo_name}</td>
-                        <td>${entry.duty_time}</td>
-                        <td>${entry.mobile_no}</td>
-                        <td>${entry.user_id}</td>
-                        <td><a href="https://www.google.com/maps/search/?api=1&query=${entry.location}" target="_blank">View Location</a></td>
-                        <td><button data-index="${index}" class="delete-data-btn">Delete</button></td>
-                    `;
-                    table.appendChild(row);
-                });
-
-                document.querySelectorAll('.delete-data-btn').forEach(btn => {
-                    btn.addEventListener('click', function () {
-                        const index = this.getAttribute('data-index');
-                        dataEntries.splice(index, 1);
-                        localStorage.setItem('data_entries', JSON.stringify(dataEntries));
-                        loadData();
-                    });
-                });
-            }
-
-            function switchToSection(sectionId) {
-                document.querySelectorAll('.section').forEach(section => section.classList.remove('visible'));
-                document.getElementById(sectionId).classList.add('visible');
-            }
-
-            function showSuspensionMessage() {
-                suspensionPopup.style.display = 'block';
-            }
-
-            loginForm.addEventListener('submit', function (event) {
-                event.preventDefault();
-                const username = document.getElementById('login-username').value;
-                const password = document.getElementById('login-password').value;
-
-                if (users[username]) {
-                    if (users[username].password === password) {
-                        if (!users[username].enabled) {
-                            showSuspensionMessage();
-                            return;
-                        }
-                        localStorage.setItem('currentUser', username);
-                        switchToSection('dashboard-section');
-                        usernameDisplay.textContent = username;
-                        if (username === 'Admin') {
-                            adminControls.classList.remove('hidden');
-                            dataEntryForm.classList.add('hidden');
-                        } else {
-                            adminControls.classList.add('hidden');
-                            dataEntryForm.classList.remove('hidden');
-                        }
-                        updateUserList();
-                        loadData();
-                    } else {
-                        loginErrorMessage.textContent = 'Invalid password.';
-                    }
-                } else {
-                    loginErrorMessage.textContent = 'Invalid username.';
-                }
-            });
-
-            registerForm.addEventListener('submit', function (event) {
-                event.preventDefault();
-                const username = document.getElementById('register-username').value;
-                const password = document.getElementById('register-password').value;
-
-                if (users[username]) {
-                    registerErrorMessage.textContent = 'Username already exists.';
-                } else {
-                    users[username] = { password: password, enabled: false };
-                    localStorage.setItem('users', JSON.stringify(users));
-                    registerErrorMessage.textContent = 'Registration successful. Awaiting admin approval.';
-                    switchToSection('login-section');
-                }
-            });
-
-            adminLoginForm.addEventListener('submit', function (event) {
-                event.preventDefault();
-                const adminUsername = document.getElementById('admin-username').value;
-                const adminPassword = document.getElementById('admin-password').value;
-
-                if (adminUsername === 'CHN' && adminPassword === 'CHN') {
-                    localStorage.setItem('currentUser', 'Admin');
-                    switchToSection('dashboard-section');
-                    usernameDisplay.textContent = 'Admin';
-                    adminControls.classList.remove('hidden');
-                    dataEntryForm.classList.add('hidden');
-                    updateUserList();
-                    loadData();
-                    adminLoginModal.style.display = 'none';
-                } else {
-                    adminLoginErrorMessage.textContent = 'Invalid admin credentials.';
-                }
-            });
-
-            logoutLink.addEventListener('click', function () {
-                localStorage.removeItem('currentUser');
-                switchToSection('login-section');
-            });
-
-            showRegister.addEventListener('click', function (event) {
-                event.preventDefault();
-                switchToSection('register-section');
-            });
-
-            showLogin.addEventListener('click', function (event) {
-                event.preventDefault();
-                switchToSection('login-section');
-            });
-
-            showAdminLogin.addEventListener('click', function (event) {
-                event.preventDefault();
-                adminLoginModal.style.display = 'block';
-            });
-
-            closeModal.addEventListener('click', function () {
-                adminLoginModal.style.display = 'none';
-            });
-
-            window.addEventListener('click', function (event) {
-                if (event.target === adminLoginModal) {
-                    adminLoginModal.style.display = 'none';
-                }
-            });
-
-            closePopup.addEventListener('click', function () {
-                suspensionPopup.style.display = 'none';
-            });
-
-            window.addEventListener('click', function (event) {
-                if (event.target === suspensionPopup) {
-                    suspensionPopup.style.display = 'none';
-                }
-            });
-
-            deleteAllUsersButton.addEventListener('click', function () {
-                users = {};
-                localStorage.setItem('users', JSON.stringify(users));
-                updateUserList();
-            });
-
-            dataEntryForm.addEventListener('submit', function (event) {
-                event.preventDefault();
-                const date = document.getElementById('date').value;
-                const instituteName = document.getElementById('institute-name').value;
-                const onDutyMoName = document.getElementById('on-duty-mo-name').value;
-                const dutyTime = document.getElementById('duty-time').value;
-                const mobileNo = document.getElementById('mobile-no').value;
-                const userId = localStorage.getItem('currentUser');
-                const location = ''; // You might want to add logic to get the user's current location
-
-                dataEntries.push({
-                    date,
-                    institute_name: instituteName,
-                    on_duty_mo_name: onDutyMoName,
-                    duty_time: dutyTime,
-                    mobile_no: mobileNo,
-                    user_id: userId,
-                    location
-                });
-
-                localStorage.setItem('data_entries', JSON.stringify(dataEntries));
-                loadData();
-            });
-
-            // Initial load
-            if (localStorage.getItem('currentUser')) {
-                switchToSection('dashboard-section');
-                const currentUser = localStorage.getItem('currentUser');
-                usernameDisplay.textContent = currentUser;
-                if (currentUser === 'Admin') {
-                    adminControls.classList.remove('hidden');
-                    dataEntryForm.classList.add('hidden');
-                } else {
-                    adminControls.classList.add('hidden');
-                    dataEntryForm.classList.remove('hidden');
-                }
-                updateUserList();
-                loadData();
-            }
-        });
-    </script>
-</body>
-</html>
+            const dataForm = document.getElementById
