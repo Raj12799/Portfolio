@@ -118,6 +118,20 @@
             display: none;
         }
 
+        .profile-image {
+            display: block;
+            margin: 0 auto 20px auto;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: url('profile.jpg') no-repeat center center;
+            background-size: cover;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
         @keyframes fadeIn {
             from {opacity: 0;}
             to {opacity: 1;}
@@ -165,6 +179,8 @@
     </div>
 
     <div id="login-section" class="section visible">
+        <div class="profile-image"></div>
+        <h2>District Hospital Nandurbar</h2>
         <form id="login-form">
             <h2>Login</h2>
             <input type="text" id="login-username" placeholder="Username" required>
