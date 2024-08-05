@@ -258,4 +258,231 @@
             const closeModal = document.querySelector('.close');
             const suspensionPopup = document.getElementById('suspension-popup');
             const closePopup = document.querySelector('.close-popup');
-            const dataForm = document.getElementById
+            const dataForm = document.getElementById('data-form');
+            const dataTable = document.getElementById('data-table');
+            
+            let users = JSON.parse(localStorage.getItem('users')) || {};
+            let dataEntries = JSON.parse(localStorage.getItem('data_entries')) || [];
+        
+            function updateUserList() {
+                userList.innerHTML = `
+                    <tr>
+                        <th>Sr.No</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Actions</th>
+                    </tr>
+                `;
+                Object.keys(users).forEach((username, index) => {
+                    const userRow = document.createElement('tr');
+                    userRow.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${username}</td>
+                        <td>${users[username].password}</td>
+                        <td>
+                            <button class="enable-user">Enable</button>
+                            <button class="disable-user">Disable</button>
+                            <button class="delete-user">Delete</button>
+                        </td>
+                    `;
+                    userList.appendChild(userRow);
+                    
+                    userRow.querySelector('.enable-user').addEventListener('click', function () {
+                        users[username].enabled = true;
+                        localStorage.setItem('users', JSON.stringify(users));
+                    });
+        
+                    userRow.querySelector('.disable-user').addEventListener('click', function () {
+                        users[username].enabled = false;
+                        localStorage.setItem('users', JSON.stringify(users));
+                    });
+        
+                    userRow.querySelector('.delete-user').addEventListener('click', function () {
+                        delete users[username];
+                        localStorage.setItem('users', JSON.stringify(users));
+                        updateUserList();
+                    });
+                });
+            }
+        
+            function updateDataTable() {
+                dataTable.innerHTML = `
+                    <tr>
+                        <th>Sr.No</th>
+                        <th>Date</th>
+                        <th>Institute Name</th>
+                        <th>On Duty MO Name</th>
+                        <th>Duty Time</th>
+                        <th>Mobile No</th>
+                        <th>User ID</th>
+                        <th>Location</th>
+                        <th>Actions</th>
+                    </tr>
+                `;
+                dataEntries.forEach((entry, index) => {
+                    const dataRow = document.createElement('tr');
+                    dataRow.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${entry.date}</td>
+                        <td>${entry.instituteName}</td>
+                        <td>${entry.onDutyMoName}</td>
+                        <td>${entry.dutyTime}</td>
+                        <td>${entry.mobileNo}</td>
+                        <td>${entry.userId}</td>
+                        <td>${entry.location}</td>
+                        <td><button class="delete-data">Delete</button></td>
+                    `;
+                    dataTable.appendChild(dataRow);
+        
+                    dataRow.querySelector('.delete-data').addEventListener('click', function () {
+                        dataEntries.splice(index, 1);
+                        localStorage.setItem('data_entries', JSON.stringify(dataEntries));
+                        updateDataTable();
+                    });
+                });
+            }
+        
+            function switchToSection(sectionId) {
+                const sections = document.querySelectorAll('.section');
+                sections.forEach(section => {
+                    section.classList.add('hidden');
+                    section.classList.remove('visible');
+                });
+                document.getElementById(sectionId).classList.add('visible');
+            }
+        
+            loginForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const username = document.getElementById('login-username').value;
+                const password = document.getElementById('login-password').value;
+        
+                if (users[username] && users[username].password === password) {
+                    if (users[username].enabled === false) {
+                        suspensionPopup.style.display = 'block';
+                    } else {
+                        localStorage.setItem('currentUser', username);
+                        switchToSection('dashboard-section');
+                        usernameDisplay.textContent = username;
+                        updateUserList();
+                        updateDataTable();
+                    }
+                } else {
+                    loginErrorMessage.textContent = 'Invalid username or password.';
+                }
+            });
+        
+            registerForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const username = document.getElementById('register-username').value;
+                const password = document.getElementById('register-password').value;
+        
+                if (users[username]) {
+                    registerErrorMessage.textContent = 'Username already exists.';
+                } else {
+                    users[username] = { password: password, enabled: true };
+                    localStorage.setItem('users', JSON.stringify(users));
+                    switchToSection('login-section');
+                }
+            });
+        
+            adminLoginForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const adminUsername = document.getElementById('admin-username').value;
+                const adminPassword = document.getElementById('admin-password').value;
+        
+                if (adminUsername === 'CHN' && adminPassword === 'CHN') {
+                    switchToSection('dashboard-section');
+                    adminControls.classList.remove('hidden');
+                    usernameDisplay.textContent = 'Admin';
+                    updateUserList();
+                    updateDataTable();
+                    adminLoginModal.style.display = 'none';
+                } else {
+                    adminLoginErrorMessage.textContent = 'Invalid admin credentials.';
+                }
+            });
+        
+            logoutLink.addEventListener('click', function (event) {
+                event.preventDefault();
+                localStorage.removeItem('currentUser');
+                switchToSection('login-section');
+            });
+        
+            dataForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const date = document.getElementById('date').value;
+                const instituteName = document.getElementById('institute_name').value;
+                const onDutyMoName = document.getElementById('on_duty_mo_name').value;
+                const dutyTime = document.getElementById('duty_time').value;
+                const mobileNo = document.getElementById('mobile_no').value;
+                const userId = localStorage.getItem('currentUser');
+                const location = 'User Location'; // Placeholder for user location logic
+                
+                const entry = {
+                    date: date,
+                    instituteName: instituteName,
+                    onDutyMoName: onDutyMoName,
+                    dutyTime: dutyTime,
+                    mobileNo: mobileNo,
+                    userId: userId,
+                    location: location
+                };
+        
+                dataEntries.push(entry);
+                localStorage.setItem('data_entries', JSON.stringify(dataEntries));
+                updateDataTable();
+                dataForm.reset();
+            });
+        
+            showRegister.addEventListener('click', function (event) {
+                event.preventDefault();
+                switchToSection('register-section');
+            });
+        
+            showLogin.addEventListener('click', function (event) {
+                event.preventDefault();
+                switchToSection('login-section');
+            });
+        
+            showAdminLogin.addEventListener('click', function (event) {
+                event.preventDefault();
+                adminLoginModal.style.display = 'block';
+            });
+        
+            closeModal.addEventListener('click', function () {
+                adminLoginModal.style.display = 'none';
+            });
+        
+            window.addEventListener('click', function (event) {
+                if (event.target === adminLoginModal) {
+                    adminLoginModal.style.display = 'none';
+                }
+            });
+        
+            closePopup.addEventListener('click', function () {
+                suspensionPopup.style.display = 'none';
+            });
+        
+            window.addEventListener('click', function (event) {
+                if (event.target === suspensionPopup) {
+                    suspensionPopup.style.display = 'none';
+                }
+            });
+        
+            deleteAllUsersButton.addEventListener('click', function () {
+                users = {};
+                localStorage.setItem('users', JSON.stringify(users));
+                updateUserList();
+            });
+            
+            // Initial load
+            if (localStorage.getItem('currentUser')) {
+                switchToSection('dashboard-section');
+                usernameDisplay.textContent = localStorage.getItem('currentUser');
+                updateUserList();
+                updateDataTable();
+            }
+        });
+    </script>
+</body>
+</html>
