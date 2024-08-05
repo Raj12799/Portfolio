@@ -260,10 +260,10 @@
             const closePopup = document.querySelector('.close-popup');
             const dataForm = document.getElementById('data-form');
             const dataTable = document.getElementById('data-table');
-            
+
             let users = JSON.parse(localStorage.getItem('users')) || {};
             let dataEntries = JSON.parse(localStorage.getItem('data_entries')) || [];
-        
+
             function updateUserList() {
                 userList.innerHTML = `
                     <tr>
@@ -291,12 +291,12 @@
                         users[username].enabled = true;
                         localStorage.setItem('users', JSON.stringify(users));
                     });
-        
+
                     userRow.querySelector('.disable-user').addEventListener('click', function () {
                         users[username].enabled = false;
                         localStorage.setItem('users', JSON.stringify(users));
                     });
-        
+
                     userRow.querySelector('.delete-user').addEventListener('click', function () {
                         delete users[username];
                         localStorage.setItem('users', JSON.stringify(users));
@@ -304,7 +304,7 @@
                     });
                 });
             }
-        
+
             function updateDataTable() {
                 dataTable.innerHTML = `
                     <tr>
@@ -333,7 +333,7 @@
                         <td><button class="delete-data">Delete</button></td>
                     `;
                     dataTable.appendChild(dataRow);
-        
+
                     dataRow.querySelector('.delete-data').addEventListener('click', function () {
                         dataEntries.splice(index, 1);
                         localStorage.setItem('data_entries', JSON.stringify(dataEntries));
@@ -341,7 +341,7 @@
                     });
                 });
             }
-        
+
             function switchToSection(sectionId) {
                 const sections = document.querySelectorAll('.section');
                 sections.forEach(section => {
@@ -350,12 +350,12 @@
                 });
                 document.getElementById(sectionId).classList.add('visible');
             }
-        
+
             loginForm.addEventListener('submit', function (event) {
                 event.preventDefault();
                 const username = document.getElementById('login-username').value;
                 const password = document.getElementById('login-password').value;
-        
+
                 if (users[username] && users[username].password === password) {
                     if (users[username].enabled === false) {
                         suspensionPopup.style.display = 'block';
@@ -370,12 +370,12 @@
                     loginErrorMessage.textContent = 'Invalid username or password.';
                 }
             });
-        
+
             registerForm.addEventListener('submit', function (event) {
                 event.preventDefault();
                 const username = document.getElementById('register-username').value;
                 const password = document.getElementById('register-password').value;
-        
+
                 if (users[username]) {
                     registerErrorMessage.textContent = 'Username already exists.';
                 } else {
@@ -384,12 +384,12 @@
                     switchToSection('login-section');
                 }
             });
-        
+
             adminLoginForm.addEventListener('submit', function (event) {
                 event.preventDefault();
                 const adminUsername = document.getElementById('admin-username').value;
                 const adminPassword = document.getElementById('admin-password').value;
-        
+
                 if (adminUsername === 'CHN' && adminPassword === 'CHN') {
                     switchToSection('dashboard-section');
                     adminControls.classList.remove('hidden');
@@ -401,13 +401,13 @@
                     adminLoginErrorMessage.textContent = 'Invalid admin credentials.';
                 }
             });
-        
+
             logoutLink.addEventListener('click', function (event) {
                 event.preventDefault();
                 localStorage.removeItem('currentUser');
                 switchToSection('login-section');
             });
-        
+
             dataForm.addEventListener('submit', function (event) {
                 event.preventDefault();
                 const date = document.getElementById('date').value;
@@ -417,7 +417,7 @@
                 const mobileNo = document.getElementById('mobile_no').value;
                 const userId = localStorage.getItem('currentUser');
                 const location = 'User Location'; // Placeholder for user location logic
-                
+
                 const entry = {
                     date: date,
                     instituteName: instituteName,
@@ -427,54 +427,54 @@
                     userId: userId,
                     location: location
                 };
-        
+
                 dataEntries.push(entry);
                 localStorage.setItem('data_entries', JSON.stringify(dataEntries));
                 updateDataTable();
                 dataForm.reset();
             });
-        
+
             showRegister.addEventListener('click', function (event) {
                 event.preventDefault();
                 switchToSection('register-section');
             });
-        
+
             showLogin.addEventListener('click', function (event) {
                 event.preventDefault();
                 switchToSection('login-section');
             });
-        
+
             showAdminLogin.addEventListener('click', function (event) {
                 event.preventDefault();
                 adminLoginModal.style.display = 'block';
             });
-        
+
             closeModal.addEventListener('click', function () {
                 adminLoginModal.style.display = 'none';
             });
-        
+
             window.addEventListener('click', function (event) {
                 if (event.target === adminLoginModal) {
                     adminLoginModal.style.display = 'none';
                 }
             });
-        
+
             closePopup.addEventListener('click', function () {
                 suspensionPopup.style.display = 'none';
             });
-        
+
             window.addEventListener('click', function (event) {
                 if (event.target === suspensionPopup) {
                     suspensionPopup.style.display = 'none';
                 }
             });
-        
+
             deleteAllUsersButton.addEventListener('click', function () {
                 users = {};
                 localStorage.setItem('users', JSON.stringify(users));
                 updateUserList();
             });
-            
+
             // Initial load
             if (localStorage.getItem('currentUser')) {
                 switchToSection('dashboard-section');
