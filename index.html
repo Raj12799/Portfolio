@@ -41,7 +41,6 @@
         .edit-button, .delete-button {
             position: absolute;
             top: 5px;
-            right: 5px;
             background: #ddd;
             border: none;
             cursor: pointer;
@@ -52,16 +51,37 @@
         .edit-button {
             right: 35px;
         }
+
+        .delete-button {
+            right: 5px;
+        }
+
+        .user-select {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
     <div id="chat-container">
+        <select id="user-select" class="user-select">
+            <option value="user1">User 1</option>
+            <option value="user2">User 2</option>
+            <option value="user3">User 3</option>
+        </select>
         <div id="message-container"></div>
         <input type="file" id="file-input" accept="image/*,video/*">
         <input type="text" id="message-input" placeholder="Type your message">
         <button id="send-button">Send</button>
     </div>
     <script>
+        const users = ['user1', 'user2', 'user3'];
+        let currentUser = 'user1'; // Default user
+
+        document.getElementById('user-select').addEventListener('change', function() {
+            currentUser = this.value;
+            loadMessages();
+        });
+
         document.getElementById('send-button').addEventListener('click', function() {
             const messageInput = document.getElementById('message-input');
             const fileInput = document.getElementById('file-input');
@@ -88,7 +108,7 @@
 
             if (messageText) {
                 const messageTextElement = document.createElement('span');
-                messageTextElement.textContent = messageText;
+                messageTextElement.textContent = `${currentUser}: ${messageText}`;
                 messageElement.appendChild(messageTextElement);
             }
             
@@ -113,7 +133,6 @@
             messageInput.value = '';
             fileInput.value = '';
             
-            // Store messages in the HTML page
             saveMessages();
         });
 
@@ -121,7 +140,7 @@
             const messageTextElement = messageElement.querySelector('span');
             const newText = prompt('Edit your message:', messageTextElement.textContent);
             if (newText !== null) {
-                messageTextElement.textContent = newText;
+                messageTextElement.textContent = `${currentUser}: ${newText}`;
                 saveMessages();
             }
         }
@@ -135,13 +154,17 @@
 
         function saveMessages() {
             const messageContainer = document.getElementById('message-container');
-            localStorage.setItem('messages', messageContainer.innerHTML);
+            const messages = messageContainer.innerHTML;
+            localStorage.setItem('messages', messages);
         }
 
-        // Load messages on page load
-        document.addEventListener('DOMContentLoaded', function() {
+        function loadMessages() {
             const messageContainer = document.getElementById('message-container');
             messageContainer.innerHTML = localStorage.getItem('messages') || '';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMessages();
         });
     </script>
 </body>
