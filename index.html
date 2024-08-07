@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Chat App</title>
+    <title>Simple Chat App</title>
     <style>
         #chat-container {
             width: 300px;
@@ -30,27 +30,11 @@
             margin: 5px 0;
             border-radius: 5px;
             background: #f1f1f1;
-            position: relative;
         }
 
         .message img, .message video {
             max-width: 100%;
             height: auto;
-        }
-
-        .message button {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: #f00;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .message button.edit {
-            background: #00f;
         }
     </style>
 </head>
@@ -62,86 +46,50 @@
         <button id="send-button">Send</button>
     </div>
     <script>
-        const channel = new BroadcastChannel('chat_channel');
-
-        function addMessage(messageHtml) {
-            const messageContainer = document.getElementById('message-container');
-            messageContainer.innerHTML += messageHtml;
-            localStorage.setItem('messages', messageContainer.innerHTML);
-            messageContainer.scrollTop = messageContainer.scrollHeight;
-        }
-
-        function createMessageElement(text, fileUrl) {
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message');
-            
-            if (text) {
-                messageElement.textContent = text;
-            }
-            
-            if (fileUrl) {
-                const fileType = fileUrl.split('/')[fileUrl.split('/').length - 1].split('.')[1];
-                if (fileType.startsWith('image')) {
-                    const img = document.createElement('img');
-                    img.src = fileUrl;
-                    messageElement.appendChild(img);
-                } else if (fileType.startsWith('video')) {
-                    const video = document.createElement('video');
-                    video.src = fileUrl;
-                    video.controls = true;
-                    messageElement.appendChild(video);
-                }
-            }
-            
-            const deleteButton = document.createElement('button');
-            deleteButton.textContent = 'Delete';
-            deleteButton.addEventListener('click', () => {
-                messageElement.remove();
-                localStorage.setItem('messages', document.getElementById('message-container').innerHTML);
-                channel.postMessage({ action: 'update', content: document.getElementById('message-container').innerHTML });
-            });
-            messageElement.appendChild(deleteButton);
-            
-            const editButton = document.createElement('button');
-            editButton.textContent = 'Edit';
-            editButton.classList.add('edit');
-            editButton.addEventListener('click', () => {
-                const newText = prompt('Edit your message:', text || '');
-                if (newText !== null) {
-                    messageElement.firstChild.textContent = newText;
-                    localStorage.setItem('messages', document.getElementById('message-container').innerHTML);
-                    channel.postMessage({ action: 'update', content: document.getElementById('message-container').innerHTML });
-                }
-            });
-            messageElement.appendChild(editButton);
-
-            return messageElement.outerHTML;
-        }
-
         document.getElementById('send-button').addEventListener('click', function() {
             const messageInput = document.getElementById('message-input');
             const fileInput = document.getElementById('file-input');
+            const messageContainer = document.getElementById('message-container');
             
             const messageText = messageInput.value;
             const file = fileInput.files[0];
-            const fileUrl = file ? URL.createObjectURL(file) : null;
             
-            const messageHtml = createMessageElement(messageText, fileUrl);
-            addMessage(messageHtml);
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
 
+            if (messageText) {
+                messageElement.textContent = messageText;
+            }
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    if (file.type.startsWith('image/')) {
+                        const img = document.createElement('img');
+                        img.src = event.target.result;
+                        messageElement.appendChild(img);
+                    } else if (file.type.startsWith('video/')) {
+                        const video = document.createElement('video');
+                        video.src = event.target.result;
+                        video.controls = true;
+                        messageElement.appendChild(video);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+            
+            messageContainer.appendChild(messageElement);
             messageInput.value = '';
             fileInput.value = '';
+            
+            // Store messages in the HTML page
+            localStorage.setItem('messages', messageContainer.innerHTML);
         });
 
+        // Load messages on page load
         document.addEventListener('DOMContentLoaded', function() {
             const messageContainer = document.getElementById('message-container');
             messageContainer.innerHTML = localStorage.getItem('messages') || '';
-        });
-
-        channel.addEventListener('message', function(event) {
-            if (event.data.action === 'update') {
-                document.getElementById('message-container').innerHTML = event.data.content;
-            }
         });
     </script>
 </body>
