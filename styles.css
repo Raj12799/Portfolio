@@ -1,0 +1,242 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@100..900&display=swap');
+*{
+    font-family: "Noto Serif Devanagari", serif;
+}
+
+body.light-mode {
+
+    background-color: #f8f9fa;
+    color: #343a40;
+}
+.heddd{
+    font-family: "Noto Serif Devanagari", serif;
+  font-size: 80px;
+  
+}
+body.dark-mode {
+    background-color: #343a40;
+    color: #f8f9fa;
+}
+.brain{
+display: flex;
+justify-content: space-between;
+}
+.header-theme-switcher,
+.header-language-switcher {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.theme-switcher,
+.language-switcher {
+    margin-left: auto;
+}
+
+.theme-switcher input,
+.language-switcher select {
+    margin-left: 10px;
+}
+
+.scrolling-text {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.scrolling-text p {
+    display: inline-block;
+    animation: scrollText 40s linear infinite;
+}
+
+@keyframes scrollText {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+/* add */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background: #fff;
+    margin: 4px;
+    transition: all 0.3s;
+}
+.ad-board {
+    width: 100%;
+    max-width: 90%;
+    margin: 20px auto;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #333;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ad-slide {
+    display: none;
+    width: 100%;
+    height: 600px; /* Adjust ad size */
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.ad-content {
+    text-align: center;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.explore-btn {
+    margin-top: auto;
+    padding: 10px 50px;
+    background-color: #fff;
+    color: #333;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    position: absolute;
+    bottom: 10px; /* Position the button at the bottom */
+}
+
+.explore-btn:hover {
+    background-color: #2f71ff;
+}
+
+/* Navigation Buttons */
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0);
+    /* color: white; */
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 50%;
+    user-select: none;
+}
+
+.prev-btn {
+    left: 10px;
+}
+
+.next-btn {
+    right: 10px;
+}
+
+.nav-btn:hover {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+
+/* .ads-section {
+    position: relative;
+    overflow: hidden;
+    margin-top: 20px;
+    text-align: center;
+    height: 400px;
+}
+
+.ads-container {
+    display: flex;
+    transition: transform 0.5s ease;
+   height: 400px;
+}
+
+.ad {
+    width: 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    position: relative;
+}
+
+.ad button {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.ad button:hover {
+    background-color: #0056b3;
+}
+
+.ads-buttons {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+}
+
+.ads-buttons button {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+} */
+
+.important-persons .person {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.important-persons img {
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.footer {
+    background-color: #343a40;
+    color: white;
+    padding: 20px 0;
+}
+
+.footer .important-links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer .important-links ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer .important-links ul li a:hover {
+    text-decoration: underline;
+}
+
+.footer .map-container iframe {
+    margin-top: 10px;
+}
