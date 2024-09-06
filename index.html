@@ -3,207 +3,297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>District Hospital Website</title>
+    <title>Modern Web App</title>
+
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Custom CSS -->
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            transition: background-color 0.5s, color 0.5s;
-        }
-        .dark-mode {
-            background-color: #121212;
-            color: #fff;
-        }
-        .theme-switcher {
-            cursor: pointer;
-            font-size: 24px;
-        }
-        .dark-mode .theme-switcher i {
-            color: #ffd700;
-        }
-        header {
-            background: linear-gradient(90deg, #0062cc 0%, #007bff 50%, #6610f2 100%);
-            color: white;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-        }
-        .navbar {
-            background-color: #f8f9fa;
-        }
-        .dark-mode .navbar {
-            background-color: #343a40;
-        }
-        .nav-link {
-            transition: color 0.3s;
-        }
-        .nav-link:hover {
-            color: #6610f2;
-        }
-        .dark-mode .nav-link:hover {
-            color: #ffd700;
-        }
-        .bg-dark-custom {
-            background: linear-gradient(90deg, #0d0d0d 0%, #333 100%);
-            color: white;
-        }
-        .footer-custom {
-            background-color: #f8f9fa;
+            transition: all 0.3s ease-in-out;
+            background-color: #f0f0f0;
             color: #333;
         }
-        .dark-mode .footer-custom {
+        .dark-theme {
+            background-color: #1f1f1f;
+            color: white;
+        }
+
+        /* Header Styling */
+        header {
+            background-color: #007bff;
+            padding: 15px;
+            color: white;
+        }
+        #hospitalName {
+            font-size: 2rem;
+            transition: font-size 0.3s;
+        }
+        .theme-switcher {
+            font-size: 1.5rem;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: #007bff;
+        }
+        .navbar-nav .nav-link {
+            color: white;
+        }
+
+        /* Notification Sidebar */
+        #notificationsSidebar {
+            position: fixed;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 300px;
+            background-color: #f8f9fa;
+            padding: 20px;
+            display: none;
+            z-index: 1000;
+            box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Fade Animation */
+        .fade-in {
+            opacity: 0;
+            animation: fadeInAnimation 1s forwards;
+        }
+
+        @keyframes fadeInAnimation {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Section Styling */
+        section {
+            padding: 50px 0;
+        }
+
+        .dark-theme section {
             background-color: #333;
-            color: white;
+            color: #fff;
         }
-        .dark-mode .modal-content {
-            background-color: #2c2c2c;
-            color: white;
+
+        /* Responsive Divs */
+        .section-box {
+            background-color: #e0e0e0;
+            margin-bottom: 20px;
+            padding: 20px;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
         }
-        .dark-mode .btn-close {
-            filter: invert(1);
+
+        /* Profile Styling */
+        .profile-card img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+        }
+        .profile-card {
+            text-align: center;
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: #007bff;
+            color: white;
+            padding: 20px 0;
         }
         footer a {
-            color: #007bff;
-            text-decoration: none;
+            color: white;
         }
-        footer a:hover {
-            color: #0056b3;
+
+        /* Privacy Policy Modal */
+        #privacyModal .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .section-box {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Header with Logo and Theme Switcher -->
-    <header class="d-flex justify-content-between align-items-center p-3">
+    <!-- Header -->
+    <header class="d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
-            <img src="logo.png" alt="District Hospital Logo" style="width: 50px;">
-            <h1 class="ms-3">District Hospital</h1>
+            <img src="logo.png" alt="Logo" width="50" height="50" class="me-2">
+            <h1 id="hospitalName">District Hospital Nandurbar</h1>
         </div>
-        <div id="themeSwitcher" class="theme-switcher">
-            <i class="fas fa-sun" id="themeIcon"></i>
-        </div>
+        <button class="btn btn-light theme-switcher" id="themeSwitcher">
+            <i class="fas fa-sun"></i>
+        </button>
     </header>
 
-    <!-- Navbar with Dropdown Submenu for Departments -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="departmentsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Departments</a>
-                    <ul class="dropdown-menu" aria-labelledby="departmentsDropdown">
-                        <li><a class="dropdown-item" href="#">Department 1</a></li>
-                        <li><a class="dropdown-item" href="#">Department 2</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item"><a class="nav-link" href="#">Gallery</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Requirements</a></li>
-            </ul>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Important</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Gallery</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="departmentsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Departments
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Department 1</a></li>
+                            <li><a class="dropdown-item" href="#">Department 2</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <button class="btn btn-outline-light" id="notificationButton"><i class="fas fa-bell"></i> Notifications</button>
+            </div>
         </div>
     </nav>
 
-    <!-- Sliding Text Section -->
-    <div class="bg-dark-custom py-2">
-        <marquee behavior="scroll" direction="left">Welcome to the District Hospital! Stay informed with our latest updates.</marquee>
+    <!-- Notifications Sidebar (Visible only on Home page) -->
+    <div id="notificationsSidebar" class="fade-in">
+        <h4>Notifications</h4>
+        <ul>
+            <li>Notification 1</li>
+            <li>Notification 2</li>
+            <li>Notification 3</li>
+            <li>Notification 4</li>
+        </ul>
+        <button id="closeNotifications" class="btn btn-danger">Close</button>
     </div>
 
-    <!-- Section with Two Boxes -->
-    <section class="container my-5">
+    <!-- Sections -->
+    <section class="container fade-in">
         <div class="row">
-            <div class="col-md-6 mb-3">
-                <div class="p-3 bg-light">Box 1 content here</div>
+            <div class="col-md-6 col-12 mb-3">
+                <div class="section-box">Section Content 1</div>
             </div>
-            <div class="col-md-6 mb-3">
-                <div class="p-3 bg-light">Box 2 content here</div>
+            <div class="col-md-6 col-12 mb-3">
+                <div class="section-box">Section Content 2</div>
             </div>
         </div>
     </section>
 
-    <!-- Section with Four Boxes -->
-    <section class="container my-5">
+    <!-- Section for Boxes -->
+    <section class="container fade-in">
         <div class="row">
-            <div class="col-md-3 col-sm-6 mb-3">
-                <div class="p-3 bg-light">Box 1 content here</div>
+            <div class="col-md-3 col-12">
+                <div class="section-box">Box 1</div>
             </div>
-            <div class="col-md-3 col-sm-6 mb-3">
-                <div class="p-3 bg-light">Box 2 content here</div>
+            <div class="col-md-3 col-12">
+                <div class="section-box">Box 2</div>
             </div>
-            <div class="col-md-3 col-sm-6 mb-3">
-                <div class="p-3 bg-light">Box 3 content here</div>
+            <div class="col-md-3 col-12">
+                <div class="section-box">Box 3</div>
             </div>
-            <div class="col-md-3 col-sm-6 mb-3">
-                <div class="p-3 bg-light">Box 4 content here</div>
+            <div class="col-md-3 col-12">
+                <div class="section-box">Box 4</div>
             </div>
         </div>
     </section>
 
-    <!-- Footer with Privacy Policy and Rights Reserved -->
-    <footer class="footer-custom p-4">
+    <!-- Important People Section -->
+    <section class="container fade-in">
+        <h2 class="text-center mb-5">महत्वाचे व्यक्ती</h2>
+        <div class="row">
+            <div class="col-md-3 col-12 profile-card">
+                <img src="profile1.jpg" alt="Profile">
+                <h5>Name 1</h5>
+            </div>
+            <div class="col-md-3 col-12 profile-card">
+                <img src="profile2.jpg" alt="Profile">
+                <h5>Name 2</h5>
+            </div>
+            <div class="col-md-3 col-12 profile-card">
+                <img src="profile3.jpg" alt="Profile">
+                <h5>Name 3</h5>
+            </div>
+            <div class="col-md-3 col-12 profile-card">
+                <img src="profile4.jpg" alt="Profile">
+                <h5>Name 4</h5>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="fade-in">
         <div class="container">
             <div class="row">
-                <div class="col-md-3">Footer Item 1</div>
-                <div class="col-md-3">Footer Item 2</div>
-                <div class="col-md-3">Footer Item 3</div>
-                <div class="col-md-3">Footer Item 4</div>
+                <div class="col-md-3 col-12">Footer Box 1</div>
+                <div class="col-md-3 col-12">Footer Box 2</div>
+                <div class="col-md-3 col-12">Footer Box 3</div>
+                <div class="col-md-3 col-12">Footer Box 4</div>
             </div>
-        </div>
-        <div class="text-center mt-3">
-            <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Click here for Privacy Policy</a>
-        </div>
-        <div class="text-center mt-2">
-            <p>&copy; 2024 District Hospital. All rights reserved.</p>
+            <p class="text-center mt-3"><a href="#" id="privacyLink">Click here to Privacy Policy</a></p>
+            <p class="text-center mt-3">&copy; All Rights Reserved</p>
         </div>
     </footer>
 
     <!-- Privacy Policy Modal -->
     <div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="privacyModalLabel">Privacy Policy</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <p>This is a temporary privacy policy content.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="printPolicy()">Print</button>
-          </div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="privacyModalLabel">Privacy Policy</h5>
+                    <button type="button" id="printButton" class="btn btn-primary"><i class="fas fa-print"></i></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Privacy policy content.</p>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
-    <!-- Bootstrap JS and Popper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Theme Switcher JavaScript -->
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
     <script>
+        // Theme Switcher
         const themeSwitcher = document.getElementById('themeSwitcher');
-        const themeIcon = document.getElementById('themeIcon');
+        const body = document.body;
+        themeSwitcher.addEventListener('click', () => {
+            body.classList.toggle('dark-theme');
+            themeSwitcher.innerHTML = body.classList.contains('dark-theme')
+                ? '<i class="fas fa-moon"></i>'
+                : '<i class="fas fa-sun"></i>';
+        });
 
-        themeSwitcher.addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            themeIcon.classList.toggle('fa-moon');
-            themeIcon.classList.toggle('fa-sun');
+        // Notifications Sidebar (Visible only on Home page)
+        const notificationButton = document.getElementById('notificationButton');
+        const notificationsSidebar = document.getElementById('notificationsSidebar');
+        const closeNotifications = document.getElementById('closeNotifications');
+
+        notificationButton.addEventListener('click', () => {
+            notificationsSidebar.style.display = 'block';
+        });
+
+        closeNotifications.addEventListener('click', () => {
+            notificationsSidebar.style.display = 'none';
+        });
+
+        // Privacy Policy Modal
+        const privacyLink = document.getElementById('privacyLink');
+        const privacyModal = new bootstrap.Modal(document.getElementById('privacyModal'));
+
+        privacyLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            privacyModal.show();
+        });
+
+        document.getElementById('printButton').addEventListener('click', () => {
+            window.print();
         });
     </script>
-
-    <!-- Print Privacy Policy Modal JavaScript -->
-    <script>
-        function printPolicy() {
-            var printContents = document.querySelector('#privacyModal .modal-body').innerHTML;
-            var originalContents = document.body.innerHTML;
-            document.body.innerHTML = printContents;
-            window.print();
-            document.body.innerHTML = originalContents;
-            window.location.reload();
-        }
-    </script>
-
 </body>
 </html>
