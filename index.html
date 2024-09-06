@@ -11,6 +11,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- Custom CSS -->
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&display=swap');
+        *{
+            font-family: "Tiro Devanagari Marathi", serif;
+  font-weight: 400;
+  font-style: normal;
+        }
         body {
             transition: all 0.3s ease-in-out;
             background-color: #f0f0f0;
@@ -118,7 +124,81 @@
             .section-box {
                 width: 100%;
             }
+            
         }
+        /*  */
+        .marquee {
+    overflow: hidden; /* Hides the overflowing text */
+    white-space: nowrap; /* Prevents text from wrapping */
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+    width: 100%; /* Full width of the parent container */
+    background-color: rgba(117, 71, 71, 0.363); /* Background color of the text container */
+
+}
+
+.marquee p {
+    display: inline-block; /* Allows the text to move horizontally */
+    color: rgb(0, 0, 0); /* Text color */
+    font-size: 20px; /* Adjust font size as needed */
+    padding-left: 100%; /* Starts the text off-screen to the right */
+    animation: marquee 10s linear infinite; /* Controls the animation: 10 seconds duration, linear timing, infinite loop */
+
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(100%); /* Starts text from the right off-screen */
+    }
+    100% {
+        transform: translateX(-100%); /* Ends text at the left off-screen */
+    }
+}
+        /*  */
+
+
+        /* footer */
+        section {
+    margin-bottom: 20px;
+}
+
+.address p, .contact p {
+    margin: 0;
+}
+
+
+/* email send */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    margin: 10px 0 5px;
+}
+
+form input, form textarea {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+form button {
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #555;
+}
+
+
+
+
+
+
+
     </style>
 </head>
 <body>
@@ -155,6 +235,7 @@
                         </ul>
                     </li>
                 </ul>
+                
                 <button class="btn btn-outline-light" id="notificationButton"><i class="fas fa-bell"></i> Notifications</button>
             </div>
         </div>
@@ -171,7 +252,11 @@
         </ul>
         <button id="closeNotifications" class="btn btn-danger">Close</button>
     </div>
-
+<!--  -->
+<div class="marquee">
+    <p id="sliding-text">Loading...</p>
+</div>
+<!--  -->
     <!-- Sections -->
     <section class="container fade-in">
         <div class="row">
@@ -207,20 +292,20 @@
         <h2 class="text-center mb-5">महत्वाचे व्यक्ती</h2>
         <div class="row">
             <div class="col-md-3 col-12 profile-card">
-                <img src="profile1.jpg" alt="Profile">
-                <h5>Name 1</h5>
+                <img src="assets/csmam.png" alt="Profile">
+                <h5>जिल्हा शल्यचिकित्सक,<br> जिल्हा रुग्णालय, नंदुरबार </h5>
             </div>
             <div class="col-md-3 col-12 profile-card">
-                <img src="profile2.jpg" alt="Profile">
-                <h5>Name 2</h5>
+                <img src="assets/csmam.png" alt="Profile">
+                <h5>प्रशासकीय अधिकारी <br> जिल्हा रुग्णालय, नंदुरबार </h5>
             </div>
             <div class="col-md-3 col-12 profile-card">
-                <img src="profile3.jpg" alt="Profile">
-                <h5>Name 3</h5>
+                <img src="assets/csmam.png" alt="Profile">
+                <h5>कार्यालय अधीक्षक<br> जिल्हा रुग्णालय, नंदुरबार</h5>
             </div>
             <div class="col-md-3 col-12 profile-card">
-                <img src="profile4.jpg" alt="Profile">
-                <h5>Name 4</h5>
+                <img src="assets/csmam.png" alt="Profile">
+                <h5>अतिरिक्त जिल्हा शल्यचिकित्सक<br> जिल्हा रुग्णालय, नंदुरबार</h5>
             </div>
         </div>
     </section>
@@ -229,10 +314,78 @@
     <footer class="fade-in">
         <div class="container">
             <div class="row">
-                <div class="col-md-3 col-12">Footer Box 1</div>
-                <div class="col-md-3 col-12">Footer Box 2</div>
-                <div class="col-md-3 col-12">Footer Box 3</div>
-                <div class="col-md-3 col-12">Footer Box 4</div>
+                <div class="col-md-3 col-12">
+                    
+                    
+                    
+                    <section class="address">
+                        <h2>Address</h2>
+                        <p>Sakri Road,<br>District Civil Sergon Building <br>Nandurbar, Maharastra, 425412,<br>India</p>
+                    </section>
+                
+                </div>
+                <div class="col-md-3 col-12">
+
+                    <section class="address">
+                        <h2>Important Links</h2>
+                        <ul>
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Services</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Contact</a></li>
+                        </ul>
+                    </section>
+
+
+
+
+
+
+                </div>
+                <div class="col-md-3 col-12">
+                    
+                    
+                    
+                    <section class="contact">
+                        <h2>Contact</h2>
+                        <p><strong>Phone:</strong> (123) 456-7890</p>
+                        <p><strong>Email:</strong> <a href="mailto:info@example.com">info@example.com</a></p>
+                        <form id="contact-form">
+                            <label for="name">Enter Your Name:</label>
+                            <input type="text" id="name" name="name" required><br>
+            
+                            <label for="contact">Enter Your Contact No:</label>
+                            <input type="text" id="contact" name="contact" required><br>
+            
+                            <label for="email">Enter Your Email:</label>
+                            <input type="email" id="email" name="email" required><br>
+            
+                            <label for="message">Write Your Message:</label>
+                            <textarea id="message" name="message" rows="4" required></textarea><br>
+            
+                            <button type="button" onclick="sendEmail()">Send</button>
+                        </form>
+                    </section>
+                
+                
+                
+                
+                </div>
+                <div class="col-md-3 col-12">
+                    
+
+                    <section class="map">
+                        <h2>Find Us on Google Maps</h2>
+                        
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d3125.019223921862!2d74.23427284322194!3d21.338852420922226!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1725615042635!5m2!1sen!2sin" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </section>
+
+
+
+
+                </div>
+                
             </div>
             <p class="text-center mt-3"><a href="#" id="privacyLink">Click here to Privacy Policy</a></p>
             <p class="text-center mt-3">&copy; All Rights Reserved</p>
@@ -294,6 +447,61 @@
         document.getElementById('printButton').addEventListener('click', () => {
             window.print();
         });
+
+        // 
+        // Array of random texts to display
+const messages = [
+    'First message: This is the first notification!',
+    'Second message: Here comes another update!',
+    'Third message: Don\'t miss this important notice!',
+    'Fourth message: Here is something else to read!',
+    'Fifth message: Last but not least, check this out!'
+];
+
+// Function to change the text content
+function changeText() {
+    const textElement = document.getElementById('sliding-text');
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    textElement.textContent = messages[randomIndex];
+}
+
+// Change text every 5 seconds
+setInterval(changeText, 5000);
+
+// Initial text setup
+changeText();
+
+        // 
+
+
+        // 
+
+
+// Initialize EmailJS with your public key
+emailjs.init("YOUR_EMAILJS_USER_ID");
+
+function sendEmail() {
+    const form = document.getElementById('contact-form');
+    const formData = new FormData(form);
+
+    const templateParams = {
+        from_name: formData.get('name'),
+        contact_no: formData.get('contact'),
+        from_email: formData.get('email'),
+        message: formData.get('message'),
+    };
+
+    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+        .then(response => {
+            alert('Email sent successfully!');
+        })
+        .catch(error => {
+            alert('Failed to send email. Please try again.');
+            console.error('Error:', error);
+        });
+}
+
+        // 
     </script>
 </body>
 </html>
